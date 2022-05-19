@@ -1,16 +1,14 @@
 const express = require('express')
 const app = express()
 const morgan = require('morgan')
+const cors = require('cors')
 
 app.use(express.json())
+app.use(cors())
 
-morgan.token("data", (req, res) => {
-  const { body } = req;
+morgan.token('post', (req, res) => JSON.stringify(req.body))
 
-  return JSON.stringify(body);
-})
-
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms :data'))
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :post'))
 
 let persons = [
     { 
@@ -34,6 +32,13 @@ let persons = [
       number: "39-23-6423122"
     }
 ]
+
+const generateId = () => {
+  const maxId = persons.length > 0
+    ? Math.max(...persons.map(n => n.id))
+    : 0
+  return maxId + 1
+}
 
 app.get('/', (request, response) => {
   response.send('<h1>Hello World!</h1>')
@@ -61,13 +66,6 @@ app.delete('/api/persons/:id', (request, response) => {
   response.status(204).end()
 })
 
-const generateId = () => {
-  const maxId = persons.length > 0
-    ? Math.max(...persons.map(n => n.id))
-    : 0
-  return maxId + 1
-}
-
 app.post('/api/persons', (request, response) => {
   const body = request.body
 
@@ -94,7 +92,7 @@ app.post('/api/persons', (request, response) => {
   response.json(person)
 })
 
-app.get('/info', (request, response) => {
+app.get('/api/info', (request, response) => {
   const info  = `<div> <p>Phonebook has info for ${persons.length} people</p></div>
     <p>${new Date().toString()}</p>`
   response.send(info)
