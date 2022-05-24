@@ -5,6 +5,7 @@ const cors = require('cors')
 
 app.use(express.json())
 app.use(cors())
+app.use(express.static('build'))
 
 morgan.token('post', (req, res) => JSON.stringify(req.body))
 
@@ -97,8 +98,8 @@ app.get('/api/info', (request, response) => {
     <p>${new Date().toString()}</p>`
   response.send(info)
 })
-  
-const PORT = 3001
+
+//https://stark-dusk-83397.herokuapp.com/ Heroku deployed but application error
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
