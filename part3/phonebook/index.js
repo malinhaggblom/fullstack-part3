@@ -99,7 +99,7 @@ app.get('/api/info', (request, response) => {
   response.send(info)
 })
 
-//https://stark-dusk-83397.herokuapp.com/ Heroku deployed but application error
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
