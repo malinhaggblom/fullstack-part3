@@ -73,6 +73,9 @@ const App = () => {
           setConfirmMessage(null)
         },4000)
         })
+        .catch(error => {
+          console.log(error.response.data)
+        })
     }
   }
 
