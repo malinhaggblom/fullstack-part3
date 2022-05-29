@@ -47,6 +47,10 @@ app.delete('/api/persons/:id', (request, response, next) => {
     response.status(204).end()
   })
   .catch(error => next(error))
+    .then(result => {
+      response.status(204).end()
+    })
+    .catch(error => next(error))
 })
 
 app.put('/api/persons/:id', (request, response, next) => {
