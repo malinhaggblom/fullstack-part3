@@ -58,7 +58,7 @@ const App = () => {
     if (same === true) {
       setNewName('')
       setNewNumber('')
-      return;
+      return
     }
 
     else {
