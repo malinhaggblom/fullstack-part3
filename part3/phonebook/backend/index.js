@@ -14,25 +14,45 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms :p
 let persons = [
     { 
       id: 1,
-      name: "Arto Hellas", 
+      name: "Arto Hellas",
       number: "040-123456"
     },
     { 
       id: 2,
-      name: "Ada Lovelace", 
+      name: "Ada Lovelace",
       number: "39-44-5323523"
     },
     { 
       id: 3,
-      name: "Dan Abramov", 
+      name: "Dan Abramov",
       number: "12-43-234345"
     },
     { 
       id: 4,
-      name: "Mary Poppendieck", 
+      name: "Mary Poppendieck",
       number: "39-23-6423122"
     }
 ]
+
+//MongoDB
+const mongoose = require('mongoose')
+
+const url = process.env.MONGODB
+
+mongoose.connect(url)
+
+const personSchema = new mongoose.Schema({
+  name: String,
+  number: String,
+})
+
+const Persons = mongoose.model('Persons', personSchema)
+
+app.get('/api/persons', (request, response) => {
+  Persons.find({}).then(persons => {
+    response.json(persons)
+  })
+})
 
 const generateId = () => {
   const maxId = persons.length > 0
@@ -71,8 +91,8 @@ app.post('/api/persons', (request, response) => {
   const body = request.body
 
   if (!body.name || !body.number) {
-    return response.status(400).json({ 
-      error: 'The name or number missing' 
+    return response.status(400).json({
+      error: 'The name or number missing'
     })
   }
 
