@@ -12,4 +12,4 @@ const PersonList =({persons, deleteAccount}) => {
       </ul>
   )
 }
-export default PersonList;
+export default PersonList
