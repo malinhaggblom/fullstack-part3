@@ -3,18 +3,10 @@ const app = express()
 const morgan = require('morgan')
 const cors = require('cors')
 
+require('dotenv').config()
 const Persons = require('./models/person')
 
-const requestLogger = (request, response, next) => {
-  console.log('Method:', request.method)
-  console.log('Path:  ', request.path)
-  console.log('Body:  ', request.body)
-  console.log('---')
-  next()
-}
-
 app.use(express.json())
-app.use(requestLogger)
 app.use(cors())
 app.use(express.static('build'))
 
@@ -51,13 +43,9 @@ app.get('/api/persons/:id', (request, response, next) => {
 app.delete('/api/persons/:id', (request, response, next) => {
   console.log(request.params)
   Persons.findByIdAndRemove(request.params.id)
-    .then(result => {
+    .then(
       response.status(204).end()
-    })
-    .catch(error => next(error))
-    .then(result => {
-      response.status(204).end()
-    })
+    )
     .catch(error => next(error))
 })
 
@@ -116,7 +104,7 @@ const errorHandler = (error, request, response, next) => {
   if (error.name === 'CastError') {
     return response.status(400).send({ error: 'malformatted id' })
   }
-  else if(error.name == 'ValidationError') {
+  else if (error.name === 'ValidationError') {
     return response.status(400).json({ error: error.message })
   }
 
@@ -124,7 +112,7 @@ const errorHandler = (error, request, response, next) => {
 }
 app.use(errorHandler)
 
-const PORT = process.env.PORT
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
